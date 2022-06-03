@@ -51,4 +51,31 @@ class UsersResourceTest {
                 .expectStatus()
                 .is2xxSuccessful();
     }
+
+    @Test
+    void shouldRetrieveUserById() throws Exception {
+        client.get()
+                .uri("/users/{userId}", "817b12c3-6747-403c-9d01-20e4e9dcc2eb")
+                .exchange()
+                .expectBody(User.class)
+                .isEqualTo(
+                        ImmutableUser.builder()
+                                .id(UUID.fromString("817b12c3-6747-403c-9d01-20e4e9dcc2eb"))
+                                .username("admoney")
+                                .firstname("Adrian")
+                                .lastname("Money")
+                                .email("adrian.money@mail.com")
+                                .birthdate(LocalDate.of(1985, 4, 23))
+                                .build()
+                );
+    }
+
+    @Test
+    void shouldRetrieveNotFoundForNotExistingUserId() throws Exception {
+        client.get()
+                .uri("/users/{userId}", "817b12c3-6747-403c-9d01-20e4e9dcc2ea")
+                .exchange()
+                .expectStatus()
+                .isNotFound();
+    }
 }

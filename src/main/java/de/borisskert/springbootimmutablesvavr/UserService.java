@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,5 +38,11 @@ public class UserService {
 
     public void insert(NewUser user) {
         allUsers.add(user.toUser());
+    }
+
+    public Optional<User> getById(UUID userId) {
+        return allUsers.stream()
+                .filter(user -> user.id().equals(userId))
+                .findFirst();
     }
 }
