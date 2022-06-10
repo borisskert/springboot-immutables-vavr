@@ -1,1 +1,10 @@
 ---
+myapp:
+  users:
+    defaultUser:
+      id: "817b12c3-6747-403c-9d01-20e4e9dcc2eb"
+      username: admoney
+      firstname: Adrian
+      lastname: Money
+      email: adrian.money@mail.com
+      birthdate: 1985-04-23

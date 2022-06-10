@@ -1,8 +1,10 @@
 package de.borisskert.springbootimmutablesvavr;
 
+import de.borisskert.springbootimmutablesvavr.properties.ApplicationProperties;
+import de.borisskert.springbootimmutablesvavr.properties.ApplicationProperties.UsersProperties.DefaultUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +12,13 @@ import java.util.UUID;
 
 @Service
 public class UserService {
+
+    private final ApplicationProperties properties;
     private final List<User> allUsers;
 
-    public UserService() {
+    @Autowired
+    public UserService(ApplicationProperties properties) {
+        this.properties = properties;
         allUsers = createAllUsers();
     }
 
@@ -20,18 +26,10 @@ public class UserService {
         return new ArrayList<>(allUsers);
     }
 
-    private static List<User> createAllUsers() {
-        User user = ImmutableUser.builder()
-                .id(UUID.fromString("817b12c3-6747-403c-9d01-20e4e9dcc2eb"))
-                .username("admoney")
-                .firstname("Adrian")
-                .lastname("Money")
-                .email("adrian.money@mail.com")
-                .birthdate(LocalDate.of(1985, 4, 23))
-                .build();
-
+    private List<User> createAllUsers() {
         List<User> list = new ArrayList<>();
-        list.add(user);
+        final DefaultUser defaultuser = properties.users().defaultUser();
+        list.add(defaultuser.toUser());
 
         return list;
     }
@@ -41,8 +39,6 @@ public class UserService {
     }
 
     public Optional<User> getById(UUID userId) {
-        return allUsers.stream()
-                .filter(user -> user.id().equals(userId))
-                .findFirst();
+        return allUsers.stream().filter(user -> user.id().equals(userId)).findFirst();
     }
 }
