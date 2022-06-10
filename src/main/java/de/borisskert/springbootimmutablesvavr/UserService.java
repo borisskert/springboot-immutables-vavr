@@ -1,7 +1,7 @@
 package de.borisskert.springbootimmutablesvavr;
 
 import de.borisskert.springbootimmutablesvavr.properties.ApplicationProperties;
-import de.borisskert.springbootimmutablesvavr.properties.ApplicationProperties.UsersProperties.DefaultUser;
+import de.borisskert.springbootimmutablesvavr.properties.UsersProperties.DefaultUser;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import org.springframework.beans.factory.annotation.Autowired;
