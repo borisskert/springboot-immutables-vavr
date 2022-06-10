@@ -2,19 +2,18 @@ package de.borisskert.springbootimmutablesvavr;
 
 import de.borisskert.springbootimmutablesvavr.properties.ApplicationProperties;
 import de.borisskert.springbootimmutablesvavr.properties.ApplicationProperties.UsersProperties.DefaultUser;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class UserService {
 
     private final ApplicationProperties properties;
-    private final List<User> allUsers;
+    private List<User> allUsers;
 
     @Autowired
     public UserService(ApplicationProperties properties) {
@@ -23,23 +22,19 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return new ArrayList<>(allUsers);
+        return allUsers;
     }
 
     private List<User> createAllUsers() {
-        List<User> list = new ArrayList<>();
         final DefaultUser defaultuser = properties.users().defaultUser();
-
-        list.add(defaultuser.toUser());
-
-        return list;
+        return List.of(defaultuser.toUser());
     }
 
     public void insert(NewUser user) {
-        allUsers.add(user.toUser());
+        allUsers = allUsers.append(user.toUser());
     }
 
-    public Optional<User> getById(UUID userId) {
-        return allUsers.stream().filter(user -> user.id().equals(userId)).findFirst();
+    public Option<User> getById(UUID userId) {
+        return allUsers.find(user -> user.id().equals(userId));
     }
 }
