@@ -29,6 +29,7 @@ public class UserService {
     private List<User> createAllUsers() {
         List<User> list = new ArrayList<>();
         final DefaultUser defaultuser = properties.users().defaultUser();
+
         list.add(defaultuser.toUser());
 
         return list;
